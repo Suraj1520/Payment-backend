@@ -7,7 +7,8 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'https://payment-frontend-seven.vercel.app', // Set the specific origin of your frontend
+    // origin: 'https://payment-frontend-seven.vercel.app',
+    origin: 'http://localhost:3000',
     credentials: true // Allow sending credentials (cookies)
 }));
 

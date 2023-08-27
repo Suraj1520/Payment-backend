@@ -13,7 +13,7 @@ exports.addUser = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, 10);
 
         const user1 = await User.findOne({ emailId: emailId });
-        if (user1) return res.status(401).json({ message: "User already exist" });
+        if (user1) return res.status(400).send(user1);
 
         const user = new User({
             emailId: emailId,
@@ -22,7 +22,7 @@ exports.addUser = async (req, res) => {
         });
 
         await user.save();
-        res.status(201).json({ message: "User registered Successfully!" });
+        returnres.status(201).json({ message: "User registered Successfully!" });
     }
     catch (err) {
         console.log(err);
