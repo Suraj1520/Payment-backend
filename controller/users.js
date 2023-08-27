@@ -108,8 +108,6 @@ exports.cancel = async (req, res) => {
 }
 
 exports.getUser = async (req, res) => {
-    // console.log(req.user);
-    // console.log(req.user.userId);
     const user = await User.findById({ _id: req.user.userId });
     if (!user) return res.status(401).json({ message: "No user found" });
     res.status(201).json(user.subscription);
