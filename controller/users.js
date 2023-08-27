@@ -22,40 +22,31 @@ exports.addUser = async (req, res) => {
         });
 
         await user.save();
-        res.json({ message: "User registered Successfully!" });
+        res.status(201).json({ message: "User registered Successfully!" });
     }
     catch (err) {
         console.log(err);
-        res.status(401).json("Something went wrong!");
+        res.status(402).json({ message: "Something went wrong!" });
     }
 };
 
 
 exports.login = async (req, res) => {
     try {
-        // console.log(`res.body: ${req.body}`);
-        // console.log(`res.body.data: ${req.body.data}`);
-        // console.log(`res.body.email: ${req.body.emailId}`);
         const { emailId, password } = req.body;
-        // console.log(emailId);
 
         const user = await User.findOne({ emailId: emailId });
-        // console.log(user);
         if (!user) return res.status(401).json({ message: "User doesn't exist, Please sign up first" });
 
         const isValidPassword = await bcrypt.compare(password, user.password);
-        // console.log(isValidPassword);
 
         if (!isValidPassword) {
             return res.status(401).json({ message: "Wrong Password" });
         }
 
-        // const secretKey = generateSecretKey();
         const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 });
         res.status(201).json({ token, message: "Authentication Successfull" });
-
-        // res.status(201).send(user);
     }
     catch (err) {
         console.log(err);
@@ -65,10 +56,6 @@ exports.login = async (req, res) => {
 
 exports.subscriptionPurchased = async (req, res) => {
     try {
-        // console.log("req.body");
-        // console.log(req.body);
-        // console.log(req.user);
-        // console.log(req.user.userId);
         const user = await User.findById({ _id: req.user.userId });
         // console.log(user);
 
